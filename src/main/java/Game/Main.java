@@ -1,35 +1,25 @@
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
+package Game;
 
-public class Main extends Application {
+import javax.swing.*;
+import java.awt.*;
 
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Chess Game");
-
-        // Crea una nuova istanza della scacchiera
-        ChessBoard chessBoard = new ChessBoard();
-
-        // Crea un layout BorderPane
-        BorderPane borderPane = new BorderPane();
-
-        // Aggiungi la scacchiera al centro del BorderPane
-        borderPane.setCenter(chessBoard);
-
-        // Crea una scena con il BorderPane
-        Scene scene = new Scene(borderPane, 600, 600);
-
-        // Imposta la scena sul palco
-        primaryStage.setScene(scene);
-
-        // Mostra il palco
-        primaryStage.show();
-    }
+public class Main {
 
     public static void main(String[] args) {
-        launch(args);
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setTitle("Chess");
+        frame.setMinimumSize(new Dimension(800, 800));
+        frame.setLocationRelativeTo(null);  //posiziono la finestra nel centro
+        frame.setLayout(new GridBagLayout());
+        frame.getContentPane().setBackground(Color.DARK_GRAY);
+
+        // Aggiungo la scacchiera al frame dopo aver impostato il layout
+        ChessBoard board = new ChessBoard();
+        frame.add(board);
+
+        // Pack e visualizzo il frame
+        frame.pack();   //aggiusto il size della finestra
+        frame.setVisible(true);
     }
 }

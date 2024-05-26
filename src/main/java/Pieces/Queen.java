@@ -7,9 +7,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Knight extends Piece {
+public class Queen extends Piece {
 
-    public Knight(ChessBoard board, int col, int row, boolean isWhite) {
+    public Queen(ChessBoard board, int col, int row, boolean isWhite) {
         super(board);
         this.col = col;
         this.row = row;
@@ -17,12 +17,12 @@ public class Knight extends Piece {
         this.xPos = col * board.tileDimension;
         this.yPos = row * board.tileDimension;
 
-        this.type = "Knight";
+        this.type = "Queen";
         try {
             if (isWhite) {
-                this.image = ImageIO.read(Main.class.getResourceAsStream("/white_knight.png")).getScaledInstance(board.tileDimension,board.tileDimension, BufferedImage.SCALE_SMOOTH);
+                this.image = ImageIO.read(Main.class.getResourceAsStream("/white_queen.png")).getScaledInstance(board.tileDimension,board.tileDimension, BufferedImage.SCALE_SMOOTH);
             }
-            else this.image = ImageIO.read(Main.class.getResourceAsStream("/black_knight.png")).getScaledInstance(board.tileDimension,board.tileDimension, BufferedImage.SCALE_SMOOTH);
+            else this.image = ImageIO.read(Main.class.getResourceAsStream("/black_queen.png")).getScaledInstance(board.tileDimension,board.tileDimension, BufferedImage.SCALE_SMOOTH);
         }
         catch (IOException e){
             e.printStackTrace();

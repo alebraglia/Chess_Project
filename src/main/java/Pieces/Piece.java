@@ -1,25 +1,24 @@
 package Pieces;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import Game.ChessBoard;
+
+import java.awt.*;
 
 public class Piece {
 
-    public int col,row;
-    public int xPos, yPos;
-    public boolean isWhite;
-    public String name;
+    public int col,row;         // coordinate nella scacchiera
+    public int xPos, yPos;      // coordinate nello schermo
+    public boolean isWhite;     // bool per distinghere le squadre
+    public String type;         //tipo del pezzo
+    public ChessBoard board;    //board di riferimento
 
+    Image image = null;    //carica, modifica e gestisce immagini in memoria.
 
-    BufferedImage sheet;
-    {
-        try {
-            sheet = ImageIO.read(ClassLoader.getSystemResourceAsStream("pieces.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Piece (ChessBoard board){
+        this.board = board;
     }
 
-    public Piece ()
+    public void insert (Graphics2D g2d){
+        g2d.drawImage(image,xPos,yPos,null);
+    }
 }
