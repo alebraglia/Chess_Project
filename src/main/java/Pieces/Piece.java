@@ -18,7 +18,16 @@ public class Piece {
         this.board = board;
     }
 
+    // funzione per inserire il pezzo
     public void insert (Graphics2D g2d){
         g2d.drawImage(image,xPos,yPos,null);
+    }
+
+    //funzioni default da essere sovrascritte per ogni pezzo
+    public boolean isValidMove(int row,int col){
+        return true;
+    }
+    public boolean moveToOccupiedTile(int col, int row){
+        return false;
     }
 }

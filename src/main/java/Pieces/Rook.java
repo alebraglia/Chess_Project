@@ -29,4 +29,9 @@ public class Rook extends Piece {
         }
     }
 
+    //movimento del rook
+    @Override
+    public boolean isValidMove(int row, int col) {
+        return this.col == col || this.row == row;
+    }
 }

@@ -41,6 +41,12 @@ public class ChessBoard extends JPanel {
         if (sameTeam(move.piece,move.Captured)){    //se si cerca di catturare il proprio pezzo la mossa non è valida
             return false;
         }
+        if (!move.piece.isValidMove(move.nextCol, move.nextRow)){   //il movimento deve rispettare il tipo del pezzo
+            return false;
+        }
+        if (move.piece.moveToOccupiedTile(move.nextCol,move.nextRow)){
+            return false;
+        }
         return true;
     }
 
@@ -118,7 +124,7 @@ public class ChessBoard extends JPanel {
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
 
-        //drawn the board
+        //disegna il board
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 if ((r + c) % 2 == 0) {
@@ -129,6 +135,20 @@ public class ChessBoard extends JPanel {
                 g2d.fillRect(c*tileDimension,r*tileDimension,tileDimension,tileDimension);
             }
         }
+
+        //se ho un pezzo è selezionato evidenzio le possibili mosse
+        if (selectedPiece != null) {
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < cols; c++) {
+                    if (isValidMove(new Movement(this,c,r,selectedPiece))){
+                        g2d.setColor(new Color(68,180,57,190));
+                        g2d.fillRect(c*tileDimension,r*tileDimension,tileDimension,tileDimension);
+                    }
+
+                }
+            }
+        }
+
         // draw the pieces in game
         for (Piece piece : pieces) {
             piece.insert(g2d);

@@ -29,4 +29,9 @@ public class Knight extends Piece {
         }
     }
 
+    //movimentazione del cavallo
+    @Override
+    public boolean isValidMove(int col, int row) {
+        return Math.abs(col - this.col) * Math.abs(row - this.row) == 2;
+    }
 }
