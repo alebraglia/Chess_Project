@@ -11,6 +11,7 @@ public class Piece {
     public boolean isWhite;     // bool per distinghere le squadre
     public String type;         //tipo del pezzo
     public ChessBoard board;    //board di riferimento
+    public boolean isFirstMove = true;        //serve per il primo movimento del pawn e per fare castelling
 
     Image image = null;    //carica, modifica e gestisce immagini in memoria.
 
@@ -24,10 +25,11 @@ public class Piece {
     }
 
     //funzioni default da essere sovrascritte per ogni pezzo
-    public boolean isValidMove(int row,int col){
+    public boolean isValidMove(int col,int row){
         return true;
     }
-    public boolean moveToOccupiedTile(int col, int row){
+    //funzione per identificare caso ci siano pezzi nel traggito del selezionato (in modo da non saltare pezzi)
+    public boolean moveIsBlocked(int col, int row){
         return false;
     }
 }

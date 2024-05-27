@@ -29,4 +29,82 @@ public class Queen extends Piece {
         }
     }
 
+    // isValidMovement e moveIsBlocked sono l'insieme di rook e bishop
+    @Override
+    public boolean isValidMove(int col, int row) {
+        return ((Math.abs(this.col - col) == Math.abs(this.row - row)) || (this.col == col || this.row == row));
+    }
+
+    @Override
+    public boolean moveIsBlocked(int col, int row) {
+        if (this.col == col || this.row == row) {   //controllo come il rook
+            //sinistra
+            if (this.col > col){
+                for (int c = this.col - 1; c > col ; c--){  //controllo che tra la posizione finale e quella di partenza non ci sia un blocco
+                    if (board.getPiece(c,this.row) != null){
+                        return true;
+                    }
+                }
+            }
+            //destra
+            if (this.col < col){
+                for (int c = this.col + 1; c < col ; c++){  //controllo che tra la posizione finale e quella di partenza non ci sia un blocco
+                    if (board.getPiece(c,this.row) != null){
+                        return true;
+                    }
+                }
+            }
+            //alto
+            if (this.row > row){
+                for (int r = this.row - 1; r > row ; r--){  //controllo che tra la posizione finale e quella di partenza non ci sia un blocco
+                    if (board.getPiece(this.col,r) != null){
+                        return true;
+                    }
+                }
+            }
+            //basso
+            if (this.row < row){
+                for (int r = this.row + 1; r < row ; r++){  //controllo che tra la posizione finale e quella di partenza non ci sia un blocco
+                    if (board.getPiece(this.col,r) != null){
+                        return true;
+                    }
+                }
+            }
+        }
+        else {      //controllo come il bishop
+            //in alto a sinistra
+            if (this.col > col && this.row > row) {
+                for (int i = 1; i < Math.abs(this.col - col); i++) {    // cerco usando il numero di colonne rimanenti a sinistra di quella attuale
+                    if (board.getPiece(this.col - i, this.row - i) != null) {
+                        return true;
+                    }
+                }
+            }
+            //in alto a destra
+            if (this.col < col && this.row > row) {
+                for (int i = 1; i < Math.abs(this.col - col); i++) {    // cerco usando il numero di colonne rimanenti a destra di quella attuale
+                    if (board.getPiece(this.col + i, this.row - i) != null) {
+                        return true;
+                    }
+                }
+            }
+            //in basso a sinistra
+            if (this.col > col && this.row < row) {
+                for (int i = 1; i < Math.abs(this.row - row); i++) {    // cerco usando il numero di righe rimanenti in basso rispetto a quella attuale
+                    if (board.getPiece(this.col - i, this.row + i) != null) {
+                        return true;
+                    }
+                }
+            }
+            //in basso a destra
+            if (this.col < col && this.row < row) {
+                for (int i = 1; i < Math.abs(this.row - row); i++) {    // cerco usando il numero di righe rimanenti in basso rispetto a quella attuale
+                    if (board.getPiece(this.col + i, this.row + i) != null) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

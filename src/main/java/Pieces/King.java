@@ -29,4 +29,10 @@ public class King extends Piece {
         }
     }
 
+    @Override
+    public boolean isValidMove(int col, int row) {
+        // il movimento del re consiste in un quadrato intorno a lui, quindi ritorno
+        // true se il movimento si trova tra, rispettivamente, gli angoli e i lati del re
+        return Math.abs((col - this.col)*(row - this.row)) == 1 || Math.abs(col - this.col) + Math.abs(row - this.row) == 1;
+    }
 }

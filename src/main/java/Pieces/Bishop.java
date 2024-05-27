@@ -29,4 +29,46 @@ public class Bishop extends Piece {
         }
     }
 
+    @Override
+    public boolean isValidMove(int col, int row) {
+        return Math.abs(this.col - col) == Math.abs(this.row - row);
+    }
+
+    //verifico ogni direzione in cerca di un pezzo che ostacola il movimento
+    @Override
+    public boolean moveIsBlocked(int col, int row) {
+        //in alto a sinistra
+        if (this.col > col && this.row > row) {
+            for (int i = 1; i < Math.abs(this.col - col); i++) {    // cerco usando il numero di colonne rimanenti a sinistra di quella attuale
+                if (board.getPiece(this.col - i, this.row - i) != null) {
+                    return true;
+                }
+            }
+        }
+        //in alto a destra
+        if (this.col < col && this.row > row) {
+            for (int i = 1; i < Math.abs(this.col - col); i++) {    // cerco usando il numero di colonne rimanenti a destra di quella attuale
+                if (board.getPiece(this.col + i, this.row - i) != null) {
+                    return true;
+                }
+            }
+        }
+        //in basso a sinistra
+        if (this.col > col && this.row < row) {
+            for (int i = 1; i < Math.abs(this.row - row); i++) {    // cerco usando il numero di righe rimanenti in basso rispetto a quella attuale
+                if (board.getPiece(this.col - i, this.row + i) != null) {
+                    return true;
+                }
+            }
+        }
+        //in basso a destra
+        if (this.col < col && this.row < row) {
+            for (int i = 1; i < Math.abs(this.row - row); i++) {    // cerco usando il numero di righe rimanenti in basso rispetto a quella attuale
+                if (board.getPiece(this.col + i, this.row + i) != null) {
+                    return true;
+                }
+            }
+        }
+    return false;
+    }
 }

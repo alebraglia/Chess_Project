@@ -16,6 +16,7 @@ public class ChessBoard extends JPanel {
     ArrayList<Piece> pieces = new ArrayList<>();
     public Piece selectedPiece;    //pezzo che si desidera muovere
     Input input = new Input(this);
+    public int enPassantTile = -1;         // salva la posizione per l'en passant
 
     public ChessBoard() {
         this.setPreferredSize(new Dimension(cols * tileDimension, rows * tileDimension));
@@ -26,10 +27,15 @@ public class ChessBoard extends JPanel {
         addPieces();
     }
 
+    //ritorna la posizione della casella attuale
+    public int getTileNum (int col, int row){
+        return row * rows + col;
+    }
+
     //ricerca del pezzo nella posizione Col = x e Row = y
-    public Piece getPiece(int x, int y) {
+    public Piece getPiece(int c, int r) {
         for (Piece piece : pieces) {
-            if (piece.col == x && piece.row == y) {
+            if (piece.col == c && piece.row == r) {
                 return piece;
             }
         }
@@ -44,14 +50,17 @@ public class ChessBoard extends JPanel {
         if (!move.piece.isValidMove(move.nextCol, move.nextRow)){   //il movimento deve rispettare il tipo del pezzo
             return false;
         }
-        if (move.piece.moveToOccupiedTile(move.nextCol,move.nextRow)){
+        if (move.piece.moveIsBlocked(move.nextCol,move.nextRow)){
             return false;
         }
         return true;
     }
 
     //effetua le movimentazioni
-    public void makeMove(Movement move){
+    public void makeMove(Movement move){    // classe parallela che permette l' en passant
+        if (move.piece.equals("Pawn")){
+            movePawn(move);
+        } else
         //aggiorno la posizione nella scacchiera
         move.piece.col = move.nextCol;
         move.piece.row = move.nextRow;
@@ -59,7 +68,35 @@ public class ChessBoard extends JPanel {
         move.piece.xPos = move.nextCol * tileDimension;
         move.piece.yPos = move.nextRow * tileDimension;
 
+        move.piece.isFirstMove = false;
         capture(move);
+    }
+
+    private void movePawn(Movement move) {  //classe per la movimentazione del pawn che permette l'en passant
+
+        //en passant
+        int team;           //cambio la variabile team a seconda della squadra del pezzo
+        if (move.piece.isWhite){
+            team = 1;
+        }
+        else team = -1;
+
+        if (getTileNum(move.nextCol, move.nextRow) == enPassantTile){
+            move.Captured = getPiece(move.nextCol, move.nextRow + team);
+        }
+        if (Math.abs(move.piece.row - move.nextRow) == 2){
+            enPassantTile = getTileNum(move.nextCol, move.nextRow + team);
+        }
+        else enPassantTile = -1;
+
+        //aggiorno la posizione nella scacchiera
+        move.piece.col = move.nextCol;
+        move.piece.row = move.nextRow;
+        //aggiorno la posizione dello schermo
+        move.piece.xPos = move.nextCol * tileDimension;
+        move.piece.yPos = move.nextRow * tileDimension;
+
+        move.piece.isFirstMove = false;
     }
 
     // cattura di un pezzo

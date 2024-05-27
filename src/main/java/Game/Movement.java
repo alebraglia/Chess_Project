@@ -9,7 +9,7 @@ public class Movement {
     int nextRow;
 
     Piece piece;
-    Piece Captured;
+    public Piece Captured;
 
     public Movement(ChessBoard Board, int nextCol, int nextRow, Piece piece) {
         this.prevCol = piece.col;
@@ -18,6 +18,6 @@ public class Movement {
         this.nextRow = nextRow;
 
         this.piece = piece;
-        this.Captured = Board.getPiece(nextCol, nextRow);
+        this.Captured = Board.getPiece(nextCol, nextRow);   // possibile pezzo presente nella posizione di arrivo
     }
 }
