@@ -175,9 +175,11 @@ public class ChessBoard extends JPanel {
             team = 1;
         } else team = -1;
 
+        //caso il move sia un en passant catturo il pezzo che subisce
         if (getTileNum(move.nextCol, move.nextRow) == enPassantTile) {
             move.Captured = getPiece(move.nextCol, move.nextRow + team);
         }
+        // imposto la casella dell' en passant
         if (Math.abs(move.piece.row - move.nextRow) == 2) {
             enPassantTile = getTileNum(move.nextCol, move.nextRow + team);
         } else enPassantTile = -1;
