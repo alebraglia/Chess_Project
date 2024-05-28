@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class ChessBoard extends JPanel {
@@ -19,6 +18,7 @@ public class ChessBoard extends JPanel {
     public Piece selectedPiece;    //pezzo che si desidera muovere
     Input input = new Input(this);
     public int enPassantTile = -1;         // salva la posizione per l'en passant
+    public Check checkScanner = new Check(this);
 
     public ChessBoard() {
         this.setPreferredSize(new Dimension(cols * tileDimension, rows * tileDimension));
@@ -30,7 +30,7 @@ public class ChessBoard extends JPanel {
     }
 
     //ritorna la posizione della casella attuale
-    public int getTileNum (int col, int row){
+    public int getTileNum(int col, int row) {
         return row * rows + col;
     }
 
@@ -45,24 +45,29 @@ public class ChessBoard extends JPanel {
     }
 
     //verifica se una mossa è valida
-    public boolean isValidMove(Movement move){
-        if (sameTeam(move.piece,move.Captured)){    //se si cerca di catturare il proprio pezzo la mossa non è valida
+    public boolean isValidMove(Movement move) {
+        if (sameTeam(move.piece, move.Captured)) {    //se si cerca di catturare (spostarsi) sul proprio pezzo la mossa non è valida
             return false;
         }
-        if (!move.piece.isValidMove(move.nextCol, move.nextRow)){   //il movimento deve rispettare il tipo del pezzo
+        if (!move.piece.isValidMove(move.nextCol, move.nextRow)) {   //il movimento deve rispettare il tipo del pezzo
             return false;
         }
-        if (move.piece.moveIsBlocked(move.nextCol,move.nextRow)){
+        if (move.piece.moveIsBlocked(move.nextCol, move.nextRow)) {
+            return false;
+        }
+        if (checkScanner.kingIsChecked(move)) {
             return false;
         }
         return true;
     }
 
     //effetua le movimentazioni
-    public void makeMove(Movement move){    // classe parallela che permette l' en passant
-        if (move.piece.type.equals("Pawn")){
+    public void makeMove(Movement move) {    // classe parallela che permette l' en passant
+        if (move.piece.type.equals("Pawn")) {
             movePawn(move);
-        } else
+        } else if (move.piece.type.equals("King")) {
+            moveKing(move);
+        }
         //aggiorno la posizione nella scacchiera
         move.piece.col = move.nextCol;
         move.piece.row = move.nextRow;
@@ -74,44 +79,49 @@ public class ChessBoard extends JPanel {
         capture(move.Captured);
     }
 
-    //classe per la movimentazione del pawn che permette l'en passant e la pro,ozione del pezzo
+    //metodo per il castling
+    //controllo canCastle in king.isvalidMove
+    private void moveKing(Movement move) {
+        if (Math.abs(move.piece.col - move.nextCol) == 2){
+            Piece rook;
+            // parte inferiore della scacchiera
+            if (move.piece.col < move.nextCol){
+                rook = getPiece(7, move.piece.row);
+                rook.col = 5;
+            }
+            // parte superiore della scacchiera
+            else {
+                rook = getPiece(0, move.piece.row);
+                rook.col = 3;
+            }
+            rook.xPos = rook.col * tileDimension;   //sposto la torre
+        }
+    }
+
+    //classe per la movimentazione del pawn che permette l'en passant e la promozione del pezzo
     private void movePawn(Movement move) {
 
         //en passant
         int team;           //cambio la variabile team a seconda della squadra del pezzo
-        if (move.piece.isWhite){
+        if (move.piece.isWhite) {
             team = 1;
-        }
-        else team = -1;
+        } else team = -1;
 
-        if (getTileNum(move.nextCol, move.nextRow) == enPassantTile){
+        if (getTileNum(move.nextCol, move.nextRow) == enPassantTile) {
             move.Captured = getPiece(move.nextCol, move.nextRow + team);
         }
-        if (Math.abs(move.piece.row - move.nextRow) == 2){
+        if (Math.abs(move.piece.row - move.nextRow) == 2) {
             enPassantTile = getTileNum(move.nextCol, move.nextRow + team);
-        }
-        else enPassantTile = -1;
+        } else enPassantTile = -1;
 
         //promotion
-        if (move.piece.isWhite){
+        if (move.piece.isWhite) {
             team = 0;
-        }
-        else team = 7;
+        } else team = 7;
 
         if (move.nextRow == team) {
             promotePawn(move);
         }
-
-        //aggiorno la posizione nella scacchiera
-        move.piece.col = move.nextCol;
-        move.piece.row = move.nextRow;
-        //aggiorno la posizione dello schermo
-        move.piece.xPos = move.nextCol * tileDimension;
-        move.piece.yPos = move.nextRow * tileDimension;
-
-        move.piece.isFirstMove = false;
-
-        capture(move.Captured);
     }
 
     // Metodo per promuovere il pawn
@@ -175,16 +185,16 @@ public class ChessBoard extends JPanel {
 
         switch (piece) {
             case "Queen":
-                pieces.add (new Queen(this, move.nextCol, move.nextRow, move.piece.isWhite));
+                pieces.add(new Queen(this, move.nextCol, move.nextRow, move.piece.isWhite));
                 break;
             case "Rook":
-                pieces.add (new Rook(this, move.nextCol, move.nextRow, move.piece.isWhite));
+                pieces.add(new Rook(this, move.nextCol, move.nextRow, move.piece.isWhite));
                 break;
             case "Bishop":
-                pieces.add (new Bishop(this, move.nextCol, move.nextRow, move.piece.isWhite));
+                pieces.add(new Bishop(this, move.nextCol, move.nextRow, move.piece.isWhite));
                 break;
             case "Knight":
-                pieces.add (new Knight(this, move.nextCol, move.nextRow, move.piece.isWhite));
+                pieces.add(new Knight(this, move.nextCol, move.nextRow, move.piece.isWhite));
                 break;
         }
 
@@ -193,28 +203,28 @@ public class ChessBoard extends JPanel {
     }
 
     // cattura di un pezzo
-    public void capture(Piece piece){
+    public void capture(Piece piece) {
         pieces.remove(piece);
     }
 
     //verifica se 2 pezzi appartengono alla stessa squadra
-    public boolean sameTeam(Piece p1, Piece p2){
-        if (p1 == null || p2 == null){
+    public boolean sameTeam(Piece p1, Piece p2) {
+        if (p1 == null || p2 == null) {
             return false;
         }
-        if (p1.isWhite && p2.isWhite){
+        if (p1.isWhite && p2.isWhite) {
             return true;
         }
-        if (!p1.isWhite && !p2.isWhite){
+        if (!p1.isWhite && !p2.isWhite) {
             return true;
         }
         return false;
     }
 
     //funzione che mi ritorna il re
-    Piece findKing (boolean isWhite){
-        for(Piece piece : pieces){
-            if (isWhite == piece.isWhite && piece.type.equals("King")){
+    Piece findKing(boolean isWhite) {
+        for (Piece piece : pieces) {
+            if (isWhite == piece.isWhite && piece.type.equals("King")) {
                 return piece;
             }
         }
@@ -224,7 +234,7 @@ public class ChessBoard extends JPanel {
 
     //add the pieces to the array
     public void addPieces() {
-        pieces.add(new Rook(this,0,0,false));
+        pieces.add(new Rook(this, 0, 0, false));
         pieces.add(new Knight(this, 1, 0, false));
         pieces.add(new Bishop(this, 2, 0, false));
         pieces.add(new Queen(this, 3, 0, false));
@@ -233,32 +243,32 @@ public class ChessBoard extends JPanel {
         pieces.add(new Knight(this, 6, 0, false));
         pieces.add(new Rook(this, 7, 0, false));
 
-        pieces.add(new Pawn(this,0,1,false));
-        pieces.add(new Pawn(this,1,1,false));
-        pieces.add(new Pawn(this,2,1,false));
-        pieces.add(new Pawn(this,3,1,false));
-        pieces.add(new Pawn(this,4,1,false));
-        pieces.add(new Pawn(this,5,1,false));
-        pieces.add(new Pawn(this,6,1,false));
-        pieces.add(new Pawn(this,7,1,false));
+        pieces.add(new Pawn(this, 0, 1, false));
+        pieces.add(new Pawn(this, 1, 1, false));
+        pieces.add(new Pawn(this, 2, 1, false));
+        pieces.add(new Pawn(this, 3, 1, false));
+        pieces.add(new Pawn(this, 4, 1, false));
+        pieces.add(new Pawn(this, 5, 1, false));
+        pieces.add(new Pawn(this, 6, 1, false));
+        pieces.add(new Pawn(this, 7, 1, false));
 
-        pieces.add(new Rook(this,0,7,true));
-        pieces.add(new Knight(this,1,7,true));
-        pieces.add(new Bishop(this,2,7,true));
-        pieces.add(new Queen(this,3,7,true));
-        pieces.add(new King(this,4,7,true));
-        pieces.add(new Bishop(this,5,7,true));
-        pieces.add(new Knight(this,6,7,true));
-        pieces.add(new Rook(this,7,7,true));
+        pieces.add(new Rook(this, 0, 7, true));
+        pieces.add(new Knight(this, 1, 7, true));
+        pieces.add(new Bishop(this, 2, 7, true));
+        pieces.add(new Queen(this, 3, 7, true));
+        pieces.add(new King(this, 4, 7, true));
+        pieces.add(new Bishop(this, 5, 7, true));
+        pieces.add(new Knight(this, 6, 7, true));
+        pieces.add(new Rook(this, 7, 7, true));
 
-        pieces.add(new Pawn(this,0,6,true));
-        pieces.add(new Pawn(this,1,6,true));
-        pieces.add(new Pawn(this,2,6,true));
-        pieces.add(new Pawn(this,3,6,true));
-        pieces.add(new Pawn(this,4,6,true));
-        pieces.add(new Pawn(this,5,6,true));
-        pieces.add(new Pawn(this,6,6,true));
-        pieces.add(new Pawn(this,7,6,true));
+        pieces.add(new Pawn(this, 0, 6, true));
+        pieces.add(new Pawn(this, 1, 6, true));
+        pieces.add(new Pawn(this, 2, 6, true));
+        pieces.add(new Pawn(this, 3, 6, true));
+        pieces.add(new Pawn(this, 4, 6, true));
+        pieces.add(new Pawn(this, 5, 6, true));
+        pieces.add(new Pawn(this, 6, 6, true));
+        pieces.add(new Pawn(this, 7, 6, true));
 
     }
 
@@ -271,10 +281,9 @@ public class ChessBoard extends JPanel {
             for (int c = 0; c < cols; c++) {
                 if ((r + c) % 2 == 0) {
                     g2d.setColor(new Color(0x34E7C3));
-                }
-                else g2d.setColor(new Color(0xFFFFFF));
+                } else g2d.setColor(new Color(0xFFFFFF));
 
-                g2d.fillRect(c*tileDimension,r*tileDimension,tileDimension,tileDimension);
+                g2d.fillRect(c * tileDimension, r * tileDimension, tileDimension, tileDimension);
             }
         }
 
@@ -282,9 +291,9 @@ public class ChessBoard extends JPanel {
         if (selectedPiece != null) {
             for (int r = 0; r < rows; r++) {
                 for (int c = 0; c < cols; c++) {
-                    if (isValidMove(new Movement(this,c,r,selectedPiece))){
-                        g2d.setColor(new Color(68,180,57,190));
-                        g2d.fillRect(c*tileDimension,r*tileDimension,tileDimension,tileDimension);
+                    if (isValidMove(new Movement(this, c, r, selectedPiece))) {
+                        g2d.setColor(new Color(68, 180, 57, 190));
+                        g2d.fillRect(c * tileDimension, r * tileDimension, tileDimension, tileDimension);
                     }
 
                 }

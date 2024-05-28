@@ -36,7 +36,7 @@ public class Input implements MouseListener, MouseMotionListener {
         int col = e.getX() / board.tileDimension;     // coordinata x / dimensione dei blocchi produce la coordinata della destinazione
         int row = e.getY() / board.tileDimension;
 
-        //caso abbiamo un pezzo selezionato, qundo rilasciamo tale si cerca di effetuare il movimento
+        //caso abbiamo un pezzo selezionato, quando rilasciamo tale si cerca di effetuare il movimento
         if (board.selectedPiece != null){
             Movement move = new Movement(board,col,row,board.selectedPiece);    // definisco la possibile mossa a nextCol e nextRow
 
