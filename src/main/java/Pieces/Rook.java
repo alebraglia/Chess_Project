@@ -40,33 +40,33 @@ public class Rook extends Piece {
     public boolean moveIsBlocked(int col, int row) {
 
         //sinistra
-        if (this.col > col){
-            for (int c = this.col - 1; c > col ; c--){  //controllo che tra la posizione finale e quella di partenza non ci sia un blocco
-                if (board.getPiece(c,this.row) != null){
+        if (this.col > col) {
+            for (int c = this.col - 1; c > col; c--) {  //controllo che tra la posizione finale e quella di partenza non ci sia un blocco
+                if (board.getPiece(c, this.row) != null) {
                     return true;
                 }
             }
         }
         //destra
-        if (this.col < col){
-            for (int c = this.col + 1; c < col ; c++){  //controllo che tra la posizione finale e quella di partenza non ci sia un blocco
-                if (board.getPiece(c,this.row) != null){
+        if (this.col < col) {
+            for (int c = this.col + 1; c < col; c++) {  //controllo che tra la posizione finale e quella di partenza non ci sia un blocco
+                if (board.getPiece(c, this.row) != null) {
                     return true;
                 }
             }
         }
         //alto
-        if (this.row > row){
-            for (int r = this.row - 1; r > row ; r--){  //controllo che tra la posizione finale e quella di partenza non ci sia un blocco
-                if (board.getPiece(this.col,r) != null){
+        if (this.row > row) {
+            for (int r = this.row - 1; r > row; r--) {  //controllo che tra la posizione finale e quella di partenza non ci sia un blocco
+                if (board.getPiece(this.col, r) != null) {
                     return true;
                 }
             }
         }
         //basso
-        if (this.row < row){
-            for (int r = this.row + 1; r < row ; r++){  //controllo che tra la posizione finale e quella di partenza non ci sia un blocco
-                if (board.getPiece(this.col,r) != null){
+        if (this.row < row) {
+            for (int r = this.row + 1; r < row; r++) {  //controllo che tra la posizione finale e quella di partenza non ci sia un blocco
+                if (board.getPiece(this.col, r) != null) {
                     return true;
                 }
             }

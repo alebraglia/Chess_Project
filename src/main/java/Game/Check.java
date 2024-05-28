@@ -29,7 +29,7 @@ public class Check {
         }
 
         return          //controllo rook e queen
-                        inRookPath(move.nextCol, move.nextRow, king, kingCol, kingRow, 0, 1) ||     //alto
+                inRookPath(move.nextCol, move.nextRow, king, kingCol, kingRow, 0, 1) ||     //alto
                         inRookPath(move.nextCol, move.nextRow, king, kingCol, kingRow, 1, 0) ||     //destra
                         inRookPath(move.nextCol, move.nextRow, king, kingCol, kingRow, 0, -1) ||    //basso
                         inRookPath(move.nextCol, move.nextRow, king, kingCol, kingRow, -1, 0) ||    //sinistra
@@ -102,7 +102,7 @@ public class Check {
     //controlla se una casella specifica (definita da col e row) è minacciata da un cavallo (Knight) nemico che
     // potrebbe muoversi alla posizione del re (kingCol, kingRow) in uno dei suoi possibili movimenti a L
     private boolean inKnightPath(int col, int row, Piece king, int kingCol, int kingRow) {
-        return  checkKnight(board.getPiece(kingCol - 1, kingRow - 2), king, col, row) ||
+        return checkKnight(board.getPiece(kingCol - 1, kingRow - 2), king, col, row) ||
                 checkKnight(board.getPiece(kingCol + 1, kingRow - 2), king, col, row) ||
                 checkKnight(board.getPiece(kingCol + 2, kingRow - 1), king, col, row) ||
                 checkKnight(board.getPiece(kingCol + 2, kingRow + 1), king, col, row) ||
@@ -123,7 +123,7 @@ public class Check {
 
     //controllo tutta la zona intorno al pezzo in cerca di un re
     private boolean inKingPath(Piece king, int kingCol, int kingRow) {
-        return  checkKing(board.getPiece(kingCol - 1, kingRow - 1), king) ||
+        return checkKing(board.getPiece(kingCol - 1, kingRow - 1), king) ||
                 checkKing(board.getPiece(kingCol + 1, kingRow - 1), king) ||
                 checkKing(board.getPiece(kingCol, kingRow - 1), king) ||
                 checkKing(board.getPiece(kingCol - 1, kingRow), king) ||
@@ -135,7 +135,7 @@ public class Check {
 
     //verifica la presenza del re
     private boolean checkKing(Piece p, Piece k) {
-        return p != null && !board.sameTeam(p, k) && p.type.equals("King") ;
+        return p != null && !board.sameTeam(p, k) && p.type.equals("King");
     }
 
     private boolean inPawnPath(int col, int row, Piece king, int kingCol, int kingRow) {
@@ -144,12 +144,34 @@ public class Check {
             team = -1;
         } else team = 1;
 
-        return  checkPawn(board.getPiece(kingCol + 1, kingRow + team), king, col, row) ||
+        return checkPawn(board.getPiece(kingCol + 1, kingRow + team), king, col, row) ||
                 checkPawn(board.getPiece(kingCol - 1, kingRow + team), king, col, row);
 
     }
 
     private boolean checkPawn(Piece p, Piece k, int col, int row) {
         return p != null && !board.sameTeam(p, k) && p.type.equals("Pawn") && !(p.col == col && p.row == row);
+    }
+
+    //funzione che verifica uno scacco matto cercando se esiste ancora alcuna mossa valida
+    public boolean CheckMate(Piece king) {
+        for (Piece piece : board.pieces) {
+            if (board.sameTeam(piece, king)) {
+                if (piece == king) {
+                    board.selectedPiece = king;
+                } else board.selectedPiece = null;
+
+                for (int r = 0; r < board.rows; r++) {
+                    for (int c = 0; c < board.cols; c++) {
+                        Movement move = new Movement(board, c, r, piece);
+                        if (board.isValidMove(move)) {
+                            return false;          //ho trovato una mossa valida
+                        }
+
+                    }
+                }
+            }
+        }
+        return true;    // il gioco è finito
     }
 }

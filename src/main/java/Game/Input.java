@@ -9,6 +9,7 @@ import java.awt.event.MouseMotionListener;
 public class Input implements MouseListener, MouseMotionListener {
 
     ChessBoard board;
+
     public Input(ChessBoard board) {
         this.board = board;
     }
@@ -24,8 +25,8 @@ public class Input implements MouseListener, MouseMotionListener {
         int col = e.getX() / board.tileDimension;     // coordinata x / dimensione dei blocchi produce la coordinata desiderata
         int row = e.getY() / board.tileDimension;     //...
 
-        Piece selectedPiece = board.getPiece(col,row);  //cerco il pezzo selezionato
-        if (selectedPiece != null){
+        Piece selectedPiece = board.getPiece(col, row);  //cerco il pezzo selezionato
+        if (selectedPiece != null) {
             board.selectedPiece = selectedPiece;        // inizializzo selected piece
         }
     }
@@ -37,14 +38,13 @@ public class Input implements MouseListener, MouseMotionListener {
         int row = e.getY() / board.tileDimension;
 
         //caso abbiamo un pezzo selezionato, quando rilasciamo tale si cerca di effetuare il movimento
-        if (board.selectedPiece != null){
-            Movement move = new Movement(board,col,row,board.selectedPiece);    // definisco la possibile mossa a nextCol e nextRow
+        if (board.selectedPiece != null) {
+            Movement move = new Movement(board, col, row, board.selectedPiece);    // definisco la possibile mossa a nextCol e nextRow
 
             // caso la mossa sia valida la si effetua
-            if (board.isValidMove(move)){
+            if (board.isValidMove(move)) {
                 board.makeMove(move);
-            }
-            else {      //caso la mossa non sia valida la riporto alla posizione originale
+            } else {      //caso la mossa non sia valida la riporto alla posizione originale
                 board.selectedPiece.xPos = board.selectedPiece.col * board.tileDimension;
                 board.selectedPiece.yPos = board.selectedPiece.row * board.tileDimension;
             }
@@ -67,7 +67,7 @@ public class Input implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (board.selectedPiece != null){
+        if (board.selectedPiece != null) {
             board.selectedPiece.xPos = e.getX() - (board.tileDimension / 2);    //- (board.tileDimension / 2) serve per centrare il pezzo con il mouse
             board.selectedPiece.yPos = e.getY() - (board.tileDimension / 2);
 

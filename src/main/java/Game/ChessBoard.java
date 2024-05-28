@@ -19,15 +19,26 @@ public class ChessBoard extends JPanel {
     Input input = new Input(this);
     public int enPassantTile = -1;         // salva la posizione per l'en passant
     public Check checkScanner = new Check(this);
+    private boolean isWhiteTurn = true;     //variabile usata per i turni
+    boolean godMode;  // godMode
+    private JFrame mainFrame;   // collegamento al frame principale
 
-    public ChessBoard() {
+    //setter di godmode
+    public void setGodMode(boolean godMode) {
+        this.godMode = godMode;
+    }
+
+    public ChessBoard(JFrame mainFrame) {
         this.setPreferredSize(new Dimension(cols * tileDimension, rows * tileDimension));
+        this.godMode = false;
         //  inizializzo i mouseListener
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
+        this.mainFrame = mainFrame;
 
-        addPieces();
+        addPieces();    // aggiunge i pezzi
     }
+
 
     //ritorna la posizione della casella attuale
     public int getTileNum(int col, int row) {
@@ -46,6 +57,15 @@ public class ChessBoard extends JPanel {
 
     //verifica se una mossa è valida
     public boolean isValidMove(Movement move) {
+        if (godMode) {
+            return true;
+        }
+        if (move.piece.isWhite && !isWhiteTurn) {
+            return false;
+        }
+        if (!move.piece.isWhite && isWhiteTurn) {
+            return false;
+        }
         if (sameTeam(move.piece, move.Captured)) {    //se si cerca di catturare (spostarsi) sul proprio pezzo la mossa non è valida
             return false;
         }
@@ -63,6 +83,9 @@ public class ChessBoard extends JPanel {
 
     //effetua le movimentazioni
     public void makeMove(Movement move) {    // classe parallela che permette l' en passant
+        if (isWhiteTurn) {
+            isWhiteTurn = false;
+        } else isWhiteTurn = true;
         if (move.piece.type.equals("Pawn")) {
             movePawn(move);
         } else if (move.piece.type.equals("King")) {
@@ -77,15 +100,68 @@ public class ChessBoard extends JPanel {
 
         move.piece.isFirstMove = false;
         capture(move.Captured);
+
+        VerifyMate();
     }
+
+    // verifica un possibile scacco matto
+    private void VerifyMate() {
+        Piece king = this.findKing(isWhiteTurn);
+        if (checkScanner.CheckMate(king)) {
+            String winner = isWhiteTurn ? "Black player wins" : "White player wins";
+
+            // creo il jframe
+            JFrame frame = new JFrame("Game Over");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(300, 150);
+
+            // jlabel che mostrerà il vincitore
+            JLabel label = new JLabel(winner, SwingConstants.CENTER);
+
+            // bottone New game
+            JButton newGameButton = new JButton("New Game");
+            newGameButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    resetBoard();
+                    frame.dispose(); // Close the current window
+                }
+            });
+
+            // bottone close
+            JButton closeButton = new JButton("Close");
+            closeButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.exit(0); // Close the application
+                }
+            });
+
+            // crea il jpanel con i bottoni
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.add(newGameButton);
+            buttonPanel.add(closeButton);
+
+            // aggiunge le componenti al frame
+            frame.setLayout(new BorderLayout());
+            frame.add(label, BorderLayout.CENTER);
+            frame.add(buttonPanel, BorderLayout.SOUTH);
+
+            // Center the popup relative to the main frame
+            frame.setLocationRelativeTo(mainFrame);
+            // mostra il frame
+            frame.setVisible(true);
+        }
+    }
+
 
     //metodo per il castling
     //controllo canCastle in king.isvalidMove
     private void moveKing(Movement move) {
-        if (Math.abs(move.piece.col - move.nextCol) == 2){
+        if (Math.abs(move.piece.col - move.nextCol) == 2) {
             Piece rook;
             // parte inferiore della scacchiera
-            if (move.piece.col < move.nextCol){
+            if (move.piece.col < move.nextCol) {
                 rook = getPiece(7, move.piece.row);
                 rook.col = 5;
             }
@@ -272,6 +348,13 @@ public class ChessBoard extends JPanel {
 
     }
 
+    // ricarico tutte le pedine della scacchiera
+    public void resetBoard() {
+        pieces.clear();
+        this.addPieces();
+        repaint();
+    }
+
     //draw the game
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -307,3 +390,4 @@ public class ChessBoard extends JPanel {
 
     }
 }
+

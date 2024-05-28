@@ -20,11 +20,10 @@ public class Knight extends Piece {
         this.type = "Knight";
         try {
             if (isWhite) {
-                this.image = ImageIO.read(Main.class.getResourceAsStream("/white_knight.png")).getScaledInstance(board.tileDimension,board.tileDimension, BufferedImage.SCALE_SMOOTH);
-            }
-            else this.image = ImageIO.read(Main.class.getResourceAsStream("/black_knight.png")).getScaledInstance(board.tileDimension,board.tileDimension, BufferedImage.SCALE_SMOOTH);
-        }
-        catch (IOException e){
+                this.image = ImageIO.read(Main.class.getResourceAsStream("/white_knight.png")).getScaledInstance(board.tileDimension, board.tileDimension, BufferedImage.SCALE_SMOOTH);
+            } else
+                this.image = ImageIO.read(Main.class.getResourceAsStream("/black_knight.png")).getScaledInstance(board.tileDimension, board.tileDimension, BufferedImage.SCALE_SMOOTH);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
