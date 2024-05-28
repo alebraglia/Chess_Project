@@ -1,4 +1,5 @@
 Chess Project
+
 Descrizione:
 Questo progetto è un'applicazione Java che implementa un gioco di scacchi usando java swing. È stato sviluppato come parte di un corso di programmazione ad oggetti e offre funzionalità complete per giocare a scacchi contro un avversario umano.
 
