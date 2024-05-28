@@ -24,7 +24,8 @@ public class Queen extends Piece {
             } else
                 this.image = ImageIO.read(Main.class.getResourceAsStream("/black_queen.png")).getScaledInstance(board.tileDimension, board.tileDimension, BufferedImage.SCALE_SMOOTH);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Errore caricamento immagini\n");
+            System.exit(-1);
         }
     }
 

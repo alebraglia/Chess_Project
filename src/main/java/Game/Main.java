@@ -2,8 +2,6 @@ package Game;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Main {
 
@@ -22,11 +20,8 @@ public class Main {
 
         // Crea il pulsante per attivare/disattivare il God Mode
         JButton godModeButton = new JButton("God Mode");
-        godModeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                board.setGodMode(!board.godMode); // Inverti lo stato di God Mode
-            }
+        godModeButton.addActionListener(e -> {
+            board.setGodMode(!board.godMode); // Inverti lo stato di God Mode
         });
 
         // Aggiunge il pulsante in alto a destra del frame

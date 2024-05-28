@@ -1,6 +1,4 @@
 package Game;
-
-import Pieces.King;
 import Pieces.Piece;
 
 //classe che implementa tutte le funzioni relative al check
@@ -77,7 +75,7 @@ public class Check {
         return false;
     }
 
-    // verifica se una determinata posizione (data da col e row) si trova in una linea di
+    // Verifica se una determinata posizione (data da col e row) si trova in una linea di
     // attacco diretta di una torre (Rook) o di una regina (Queen) nemica lungo la direzione di una delle linee
     // diagonali rispetto alla posizione di un re (king), a partire dalla posizione del re (kingCol e kingRow).
     // La funzione viene chiamata con parametri aggiuntivi (colVal e rowVal) che determinano la direzione del
@@ -115,7 +113,7 @@ public class Check {
     //controlla se c'è un cavallo nemico in posizione col, row
     private boolean checkKnight(Piece p, Piece king, int col, int row) {
         return p != null && !board.sameTeam(p, king) && p.type.equals("Knight") && !(p.col == col && p.row == row);
-        //!(p.col == col && p.row == row) garantisce che la funzione chekKnight consideri solo i pezzi cavallo che
+        //!(p.col == col && p.row == row) garantisce che la funzione checkKnight consideri solo i pezzi cavallo che
         // minacciano la casella in esame, escludendo il caso in cui il cavallo stesso occupa la casella che
         // stiamo controllando
     }

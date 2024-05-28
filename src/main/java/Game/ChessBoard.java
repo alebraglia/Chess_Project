@@ -4,8 +4,6 @@ import Pieces.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class ChessBoard extends JPanel {
@@ -17,13 +15,13 @@ public class ChessBoard extends JPanel {
     public ArrayList<Piece> pieces = new ArrayList<>();
     public Piece selectedPiece;    //pezzo che si desidera muovere
     Input input = new Input(this);
-    public int enPassantTile = -1;         // salva la posizione per l'en passant
+    public int enPassantTile = -1;         // salva la posizione per l en passant
     public Check checkScanner = new Check(this);
     private boolean isWhiteTurn = true;     //variabile usata per i turni
     boolean godMode;  // godMode
-    private JFrame mainFrame;   // collegamento al frame principale
+    final private JFrame mainFrame;   // collegamento al frame principale
 
-    //setter di godmode
+    //setter di godMode
     public void setGodMode(boolean godMode) {
         this.godMode = godMode;
     }
@@ -81,7 +79,7 @@ public class ChessBoard extends JPanel {
         return true;
     }
 
-    //effetua le movimentazioni
+    //effettua le movimentazioni
     public void makeMove(Movement move) {    // classe parallela che permette l' en passant
         if (isWhiteTurn) {
             isWhiteTurn = false;
@@ -120,21 +118,15 @@ public class ChessBoard extends JPanel {
 
             // bottone New game
             JButton newGameButton = new JButton("New Game");
-            newGameButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    resetBoard();
-                    frame.dispose(); // Close the current window
-                }
+            newGameButton.addActionListener(e -> {
+                resetBoard();
+                frame.dispose(); // Close the current window
             });
 
             // bottone close
             JButton closeButton = new JButton("Close");
-            closeButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    System.exit(0); // Close the application
-                }
+            closeButton.addActionListener(e -> {
+                System.exit(0); // Close the application
             });
 
             // crea il jpanel con i bottoni
@@ -156,7 +148,7 @@ public class ChessBoard extends JPanel {
 
 
     //metodo per il castling
-    //controllo canCastle in king.isvalidMove
+    //controllo canCastle in king.isValidMove
     private void moveKing(Movement move) {
         if (Math.abs(move.piece.col - move.nextCol) == 2) {
             Piece rook;
@@ -221,32 +213,24 @@ public class ChessBoard extends JPanel {
         JDialog dialog = optionPane.createDialog("Promote Pawn");
 
         // Aggiunta degli action listener ai bottoni
-        queenButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                applyPromotion(move, "Queen");
-                dialog.dispose();
-            }
+        queenButton.addActionListener(e -> {
+            applyPromotion(move, "Queen");
+            dialog.dispose();
         });
 
-        rookButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                applyPromotion(move, "Rook");
-                dialog.dispose();
-            }
+        rookButton.addActionListener(e -> {
+            applyPromotion(move, "Rook");
+            dialog.dispose();
         });
 
-        bishopButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                applyPromotion(move, "Bishop");
-                dialog.dispose();
-            }
+        bishopButton.addActionListener(e -> {
+            applyPromotion(move, "Bishop");
+            dialog.dispose();
         });
 
-        knightButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                applyPromotion(move, "Knight");
-                dialog.dispose();
-            }
+        knightButton.addActionListener(e -> {
+            applyPromotion(move, "Knight");
+            dialog.dispose();
         });
 
         // Mostra il dialogo
@@ -255,9 +239,6 @@ public class ChessBoard extends JPanel {
 
     // Funzione per applicare la promozione del pedone
     private void applyPromotion(Movement move, String piece) {
-
-        // Crea il nuovo pezzo e posizionalo sulla scacchiera
-        Piece newPiece = null;
 
         switch (piece) {
             case "Queen":
@@ -274,7 +255,7 @@ public class ChessBoard extends JPanel {
                 break;
         }
 
-        // Cattura il pedone che si sta promovendo
+        // Cattura il pedone che si sta promuovendo
         capture(move.piece);
     }
 
