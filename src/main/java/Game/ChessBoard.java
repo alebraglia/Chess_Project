@@ -4,6 +4,8 @@ import Pieces.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
@@ -13,7 +15,7 @@ public class ChessBoard extends JPanel {
     // Board dimensions
     int cols = 8;
     int rows = 8;
-    ArrayList<Piece> pieces = new ArrayList<>();
+    public ArrayList<Piece> pieces = new ArrayList<>();
     public Piece selectedPiece;    //pezzo che si desidera muovere
     Input input = new Input(this);
     public int enPassantTile = -1;         // salva la posizione per l'en passant
@@ -58,7 +60,7 @@ public class ChessBoard extends JPanel {
 
     //effetua le movimentazioni
     public void makeMove(Movement move){    // classe parallela che permette l' en passant
-        if (move.piece.equals("Pawn")){
+        if (move.piece.type.equals("Pawn")){
             movePawn(move);
         } else
         //aggiorno la posizione nella scacchiera
@@ -69,10 +71,11 @@ public class ChessBoard extends JPanel {
         move.piece.yPos = move.nextRow * tileDimension;
 
         move.piece.isFirstMove = false;
-        capture(move);
+        capture(move.Captured);
     }
 
-    private void movePawn(Movement move) {  //classe per la movimentazione del pawn che permette l'en passant
+    //classe per la movimentazione del pawn che permette l'en passant e la pro,ozione del pezzo
+    private void movePawn(Movement move) {
 
         //en passant
         int team;           //cambio la variabile team a seconda della squadra del pezzo
@@ -89,6 +92,16 @@ public class ChessBoard extends JPanel {
         }
         else enPassantTile = -1;
 
+        //promotion
+        if (move.piece.isWhite){
+            team = 0;
+        }
+        else team = 7;
+
+        if (move.nextRow == team) {
+            promotePawn(move);
+        }
+
         //aggiorno la posizione nella scacchiera
         move.piece.col = move.nextCol;
         move.piece.row = move.nextRow;
@@ -97,11 +110,91 @@ public class ChessBoard extends JPanel {
         move.piece.yPos = move.nextRow * tileDimension;
 
         move.piece.isFirstMove = false;
+
+        capture(move.Captured);
+    }
+
+    // Metodo per promuovere il pawn
+    public void promotePawn(Movement move) {
+        // Creazione del pannello personalizzato con i bottoni
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 2));
+
+        JButton queenButton = new JButton("Queen");
+        JButton rookButton = new JButton("Rook");
+        JButton bishopButton = new JButton("Bishop");
+        JButton knightButton = new JButton("Knight");
+
+        panel.add(queenButton);
+        panel.add(rookButton);
+        panel.add(bishopButton);
+        panel.add(knightButton);
+
+        // Creazione del dialogo
+        JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+        JDialog dialog = optionPane.createDialog("Promote Pawn");
+
+        // Aggiunta degli action listener ai bottoni
+        queenButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                applyPromotion(move, "Queen");
+                dialog.dispose();
+            }
+        });
+
+        rookButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                applyPromotion(move, "Rook");
+                dialog.dispose();
+            }
+        });
+
+        bishopButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                applyPromotion(move, "Bishop");
+                dialog.dispose();
+            }
+        });
+
+        knightButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                applyPromotion(move, "Knight");
+                dialog.dispose();
+            }
+        });
+
+        // Mostra il dialogo
+        dialog.setVisible(true);
+    }
+
+    // Funzione per applicare la promozione del pedone
+    private void applyPromotion(Movement move, String piece) {
+
+        // Crea il nuovo pezzo e posizionalo sulla scacchiera
+        Piece newPiece = null;
+
+        switch (piece) {
+            case "Queen":
+                pieces.add (new Queen(this, move.nextCol, move.nextRow, move.piece.isWhite));
+                break;
+            case "Rook":
+                pieces.add (new Rook(this, move.nextCol, move.nextRow, move.piece.isWhite));
+                break;
+            case "Bishop":
+                pieces.add (new Bishop(this, move.nextCol, move.nextRow, move.piece.isWhite));
+                break;
+            case "Knight":
+                pieces.add (new Knight(this, move.nextCol, move.nextRow, move.piece.isWhite));
+                break;
+        }
+
+        // Cattura il pedone che si sta promovendo
+        capture(move.piece);
     }
 
     // cattura di un pezzo
-    public void capture(Movement move){
-        pieces.remove(move.Captured);
+    public void capture(Piece piece){
+        pieces.remove(piece);
     }
 
     //verifica se 2 pezzi appartengono alla stessa squadra
@@ -117,6 +210,18 @@ public class ChessBoard extends JPanel {
         }
         return false;
     }
+
+    //funzione che mi ritorna il re
+    Piece findKing (boolean isWhite){
+        for(Piece piece : pieces){
+            if (isWhite == piece.isWhite && piece.type.equals("King")){
+                return piece;
+            }
+        }
+        System.out.println("cant find King\n");
+        return null;    //caso non si trovi il king (non dovrebbe succedere)
+    }
+
     //add the pieces to the array
     public void addPieces() {
         pieces.add(new Rook(this,0,0,false));
