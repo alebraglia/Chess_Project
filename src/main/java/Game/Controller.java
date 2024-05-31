@@ -6,11 +6,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public class Input implements MouseListener, MouseMotionListener {
+public class Controller implements MouseListener, MouseMotionListener {
 
     ChessBoard board;
 
-    public Input(ChessBoard board) {
+    public Controller(ChessBoard board) {
         this.board = board;
     }
 

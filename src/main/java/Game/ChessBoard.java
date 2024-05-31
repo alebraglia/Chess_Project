@@ -14,7 +14,7 @@ public class ChessBoard extends JPanel {
     int rows = 8;
     public ArrayList<Piece> pieces = new ArrayList<>();
     public Piece selectedPiece;    //pezzo che si desidera muovere
-    Input input = new Input(this);
+    Controller controller = new Controller(this);
     public int enPassantTile = -1;         // salva la posizione per l en passant
     public Check checkScanner = new Check(this);
     private boolean isWhiteTurn = true;     //variabile usata per i turni
@@ -32,8 +32,8 @@ public class ChessBoard extends JPanel {
         this.setPreferredSize(new Dimension(cols * tileDimension, rows * tileDimension));
         this.godMode = false;
         //  inizializzo i mouseListener
-        this.addMouseListener(input);
-        this.addMouseMotionListener(input);
+        this.addMouseListener(controller);
+        this.addMouseMotionListener(controller);
         this.mainFrame = mainFrame;
         this.blackTileColor = blackTileColor;
         this.whiteTileColor = whiteTileColor;
