@@ -1,38 +1,33 @@
 Chess Project
 
-Descrizione:
-Questo progetto è un'applicazione Java che implementa un gioco di scacchi usando java swing. È stato sviluppato come parte di un corso di programmazione ad oggetti e offre funzionalità complete per giocare a scacchi contro un avversario umano.
+Description:
+This project is a Java application that implements a chess game using Java Swing. It was developed as part of an object-oriented programming course and offers comprehensive functionality for playing chess against a human opponent.
 
-Funzionalità principali:
+Main Features:
 
--Interfaccia grafica intuitiva per la visualizzazione della scacchiera e dei pezzi.
+-Intuitive graphical interface for displaying the chessboard and pieces.
+-Multiplayer mode for playing against another human player on the same computer.
+-Implementation of pawn promotion, castling, and en passant.
+-Display of possible valid moves during a player's turn.
+-Handling of check and checkmate events.
+-System Requirements:
 
--Modalità multiplayer per giocare contro un altro giocatore umano sullo stesso computer.
+Java Development Kit (JDK) version 8 or later.
+Integrated Development Environment (IDE) compatible with Java projects, such as IntelliJ IDEA or Eclipse.
+Installation and Execution:
+Clone the repository to your computer:
 
--Implementazione della promozione dei pedoni e del castling ed en passant.
+bash
 
--Visualizzazione delle possibili mosse valide durante il turno di un giocatore.
+-git clone https://github.com/alebraglia/Chess_Project.git
+-Open the project in your preferred IDE.
+-Compile and run the application.
 
--Gestione degli eventi di scacco e scacco matto.
+Contributions:
+Bug reports, feature requests, and contributions are welcome. Please open a ticket or submit a pull request on GitHub.
 
-Requisiti di sistema:
+Authors:
+This project was developed by Alessandro Braglia and Marra Federico.
 
--Java Development Kit (JDK) versione 8 o successiva.
-
--Ambiente di sviluppo integrato (IDE) compatibile con progetti Java, come IntelliJ IDEA o Eclipse.
-
-Installazione e esecuzione:
-Clona il repository sul tuo computer:
-
-git clone https://github.com/alebraglia/Chess_Project.git
-
-Apri il progetto nella tua IDE preferita.
-Compila e esegui l'applicazione.
-Contributi
-Le segnalazioni di bug, le richieste di funzionalità e i contributi sono benvenuti. Per favore, apri un ticket o invia una pull request su GitHub.
-
-Autore
-Questo progetto è stato sviluppato da Alessandro Braglia e Marra Federico.
-
-Licenza
-Questo progetto è distribuito sotto la licenza MIT License.
+License:
+This project is distributed under the MIT License.
