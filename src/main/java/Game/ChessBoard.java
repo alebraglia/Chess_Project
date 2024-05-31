@@ -20,19 +20,23 @@ public class ChessBoard extends JPanel {
     private boolean isWhiteTurn = true;     //variabile usata per i turni
     boolean godMode;  // godMode
     final private JFrame mainFrame;   // collegamento al frame principale
+    Color whiteTileColor;
+    Color blackTileColor;
 
     //setter di godMode
     public void setGodMode(boolean godMode) {
         this.godMode = godMode;
     }
 
-    public ChessBoard(JFrame mainFrame) {
+    public ChessBoard(JFrame mainFrame, Color whiteTileColor, Color blackTileColor) {
         this.setPreferredSize(new Dimension(cols * tileDimension, rows * tileDimension));
         this.godMode = false;
         //  inizializzo i mouseListener
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
         this.mainFrame = mainFrame;
+        this.blackTileColor = blackTileColor;
+        this.whiteTileColor = whiteTileColor;
 
         addPieces();    // aggiunge i pezzi
     }
@@ -346,8 +350,8 @@ public class ChessBoard extends JPanel {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 if ((r + c) % 2 == 0) {
-                    g2d.setColor(new Color(0x34E7C3));
-                } else g2d.setColor(new Color(0xFFFFFF));
+                    g2d.setColor(whiteTileColor);
+                } else g2d.setColor(blackTileColor);
 
                 g2d.fillRect(c * tileDimension, r * tileDimension, tileDimension, tileDimension);
             }
@@ -366,7 +370,7 @@ public class ChessBoard extends JPanel {
             }
         }
 
-        // draw the pieces in game
+        // draw the pieces in game-
         for (Piece piece : pieces) {
             piece.insert(g2d);
         }
