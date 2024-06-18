@@ -26,9 +26,7 @@ public abstract class Piece {
     }
 
     //funzioni default da essere soprascritte per ogni pezzo
-    public boolean isValidMove(int col, int row) {
-        return true;
-    }
+    public abstract boolean isValidMove(int col, int row);
 
     //funzione per identificare caso ci siano pezzi nel percorso del selezionato (in modo da non saltare pezzi)
     public boolean moveIsBlocked(int col, int row) {
