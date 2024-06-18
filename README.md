@@ -38,7 +38,7 @@ Contributions:
 Bug reports, feature requests, and contributions are welcome. Please open a ticket or submit a pull request on GitHub.
 
 Authors:
-This project was developed by Alessandro Braglia and Marra Federico.
+This project was developed by Alessandro Braglia
 
 License:
 This project is distributed under the MIT License.
