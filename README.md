@@ -6,10 +6,21 @@ This project is a Java application that implements a chess game using Java Swing
 Main Features:
 
 -Intuitive graphical interface for displaying the chessboard and pieces.
+
 -Multiplayer mode for playing against another human player on the same computer.
+
 -Implementation of pawn promotion, castling, and en passant.
+
 -Display of possible valid moves during a player's turn.
+
 -Handling of check and checkmate events.
+
+-GodMode button.
+
+-ChessBoard theme choice.
+
+-Game reset button.
+
 -System Requirements:
 
 Java Development Kit (JDK) version 8 or later.
