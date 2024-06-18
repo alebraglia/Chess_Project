@@ -21,7 +21,7 @@ Main Features:
 
 -Game reset button.
 
--System Requirements:
+System Requirements:
 
 Java Development Kit (JDK) version 8 or later.
 Integrated Development Environment (IDE) compatible with Java projects, such as IntelliJ IDEA or Eclipse.
