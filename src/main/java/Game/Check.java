@@ -1,4 +1,5 @@
 package Game;
+
 import Pieces.Piece;
 
 //classe che implementa tutte le funzioni relative al check
@@ -21,13 +22,14 @@ public class Check {
         int kingCol = king.col;
         int kingRow = king.row;
 
+        //caso il pezzo selezionato sia il re imposto le sue coordinate come quelle della casella destinazione per verificare se la mossa è valida
         if (board.selectedPiece != null && board.selectedPiece.type.equals("King")) {
             kingCol = move.nextCol;
             kingRow = move.nextRow;
         }
 
         return          //controllo rook e queen
-                inRookPath(move.nextCol, move.nextRow, king, kingCol, kingRow, 0, 1) ||     //alto
+                inRookPath(move.nextCol, move.nextRow, king, kingCol, kingRow, 0, 1) ||             //alto
                         inRookPath(move.nextCol, move.nextRow, king, kingCol, kingRow, 1, 0) ||     //destra
                         inRookPath(move.nextCol, move.nextRow, king, kingCol, kingRow, 0, -1) ||    //basso
                         inRookPath(move.nextCol, move.nextRow, king, kingCol, kingRow, -1, 0) ||    //sinistra
@@ -60,7 +62,7 @@ public class Check {
             if (kingCol + (i * colVal) == col && kingRow + (i * rowVal) == row) {
                 break;
             }
-            //Recupero del pezzo nella prossima posizione
+            //Recupero del pezzo nella casella attuale
             Piece piece = board.getPiece(kingCol + (i * colVal), kingRow + (i * rowVal));
 
             //controllo del pezzo trovato
@@ -100,14 +102,7 @@ public class Check {
     //controlla se una casella specifica (definita da col e row) è minacciata da un cavallo (Knight) nemico che
     // potrebbe muoversi alla posizione del re (kingCol, kingRow) in uno dei suoi possibili movimenti a L
     private boolean inKnightPath(int col, int row, Piece king, int kingCol, int kingRow) {
-        return checkKnight(board.getPiece(kingCol - 1, kingRow - 2), king, col, row) ||
-                checkKnight(board.getPiece(kingCol + 1, kingRow - 2), king, col, row) ||
-                checkKnight(board.getPiece(kingCol + 2, kingRow - 1), king, col, row) ||
-                checkKnight(board.getPiece(kingCol + 2, kingRow + 1), king, col, row) ||
-                checkKnight(board.getPiece(kingCol + 1, kingRow + 2), king, col, row) ||
-                checkKnight(board.getPiece(kingCol - 1, kingRow + 2), king, col, row) ||
-                checkKnight(board.getPiece(kingCol - 2, kingRow + 1), king, col, row) ||
-                checkKnight(board.getPiece(kingCol - 2, kingRow - 1), king, col, row);
+        return checkKnight(board.getPiece(kingCol - 1, kingRow - 2), king, col, row) || checkKnight(board.getPiece(kingCol + 1, kingRow - 2), king, col, row) || checkKnight(board.getPiece(kingCol + 2, kingRow - 1), king, col, row) || checkKnight(board.getPiece(kingCol + 2, kingRow + 1), king, col, row) || checkKnight(board.getPiece(kingCol + 1, kingRow + 2), king, col, row) || checkKnight(board.getPiece(kingCol - 1, kingRow + 2), king, col, row) || checkKnight(board.getPiece(kingCol - 2, kingRow + 1), king, col, row) || checkKnight(board.getPiece(kingCol - 2, kingRow - 1), king, col, row);
     }
 
     //controlla se c'è un cavallo nemico in posizione col, row
@@ -121,14 +116,7 @@ public class Check {
 
     //controllo tutta la zona intorno al pezzo in cerca di un re
     private boolean inKingPath(Piece king, int kingCol, int kingRow) {
-        return checkKing(board.getPiece(kingCol - 1, kingRow - 1), king) ||
-                checkKing(board.getPiece(kingCol + 1, kingRow - 1), king) ||
-                checkKing(board.getPiece(kingCol, kingRow - 1), king) ||
-                checkKing(board.getPiece(kingCol - 1, kingRow), king) ||
-                checkKing(board.getPiece(kingCol + 1, kingRow), king) ||
-                checkKing(board.getPiece(kingCol - 1, kingRow + 1), king) ||
-                checkKing(board.getPiece(kingCol + 1, kingRow + 1), king) ||
-                checkKing(board.getPiece(kingCol, kingRow + 1), king);
+        return checkKing(board.getPiece(kingCol - 1, kingRow - 1), king) || checkKing(board.getPiece(kingCol + 1, kingRow - 1), king) || checkKing(board.getPiece(kingCol, kingRow - 1), king) || checkKing(board.getPiece(kingCol - 1, kingRow), king) || checkKing(board.getPiece(kingCol + 1, kingRow), king) || checkKing(board.getPiece(kingCol - 1, kingRow + 1), king) || checkKing(board.getPiece(kingCol + 1, kingRow + 1), king) || checkKing(board.getPiece(kingCol, kingRow + 1), king);
     }
 
     //verifica la presenza del re
@@ -142,8 +130,7 @@ public class Check {
             team = -1;
         } else team = 1;
 
-        return checkPawn(board.getPiece(kingCol + 1, kingRow + team), king, col, row) ||
-                checkPawn(board.getPiece(kingCol - 1, kingRow + team), king, col, row);
+        return checkPawn(board.getPiece(kingCol + 1, kingRow + team), king, col, row) || checkPawn(board.getPiece(kingCol - 1, kingRow + team), king, col, row);
 
     }
 

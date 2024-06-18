@@ -1,7 +1,9 @@
 package Game;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class Main {
 
@@ -44,6 +46,15 @@ public class Main {
         frame.setLocationRelativeTo(null);  // Posiziona la finestra al centro
         frame.setLayout(new BorderLayout());
         frame.getContentPane().setBackground(Color.DARK_GRAY);
+        try{
+            Image icon = null;
+            icon = ImageIO.read(Main.class.getResourceAsStream("/black_knight.png"));
+            frame.setIconImage(icon);
+        }
+        catch (IOException e) {
+            System.out.println("Errore caricamento immagini\n");
+            System.exit(-1);
+        }
 
         // Aggiungo la scacchiera al frame dopo aver impostato il layout
         ChessBoard board = new ChessBoard(frame, whiteTileColor, blackTileColor);

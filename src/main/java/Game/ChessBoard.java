@@ -12,11 +12,12 @@ public class ChessBoard extends JPanel {
     // Board dimensions
     int cols = 8;
     int rows = 8;
+    // pezzi della scacchiera
     public ArrayList<Piece> pieces = new ArrayList<>();
     public Piece selectedPiece;    //pezzo che si desidera muovere
-    Controller controller = new Controller(this);
+    Controller controller = new Controller(this);   //controller
     public int enPassantTile = -1;         // salva la posizione per l en passant
-    public Check checkScanner = new Check(this);
+    public Check checkScanner = new Check(this);    //oggetto che tiene traccia dei check
     private boolean isWhiteTurn = true;     //variabile usata per i turni
     boolean godMode;  // godMode
     final private JFrame mainFrame;   // collegamento al frame principale
@@ -74,7 +75,7 @@ public class ChessBoard extends JPanel {
         if (!move.piece.isValidMove(move.nextCol, move.nextRow)) {   //il movimento deve rispettare il tipo del pezzo
             return false;
         }
-        if (move.piece.moveIsBlocked(move.nextCol, move.nextRow)) {
+        if (move.piece.moveIsBlocked(move.nextCol, move.nextRow)) {  // se il movimento è ostacolato da un pezzo
             return false;
         }
         if (checkScanner.kingIsChecked(move)) {
@@ -84,12 +85,12 @@ public class ChessBoard extends JPanel {
     }
 
     //effettua le movimentazioni
-    public void makeMove(Movement move) {    // classe parallela che permette l' en passant
+    public void makeMove(Movement move) {
         if (isWhiteTurn) {
             isWhiteTurn = false;
         } else isWhiteTurn = true;
         if (move.piece.type.equals("Pawn")) {
-            movePawn(move);
+            movePawn(move);           // classe parallela che permette l' en passant
         } else if (move.piece.type.equals("King")) {
             moveKing(move);
         }
@@ -342,7 +343,7 @@ public class ChessBoard extends JPanel {
         repaint();
     }
 
-    //draw the game
+    //disegna il gioco
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
 

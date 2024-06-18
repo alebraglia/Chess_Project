@@ -4,7 +4,7 @@ import Game.ChessBoard;
 
 import java.awt.*;
 
-public class Piece {
+public abstract class Piece {
 
     public int col, row;         // coordinate nella scacchiera
     public int xPos, yPos;      // coordinate nello schermo
@@ -15,6 +15,7 @@ public class Piece {
 
     Image image = null;    //carica, modifica e gestisce immagini in memoria.
 
+    // metodo che sarà sovrascritto per la generazione di ogni pezzo
     public Piece(ChessBoard board) {
         this.board = board;
     }
