@@ -18,7 +18,7 @@ public class King extends Piece {
         this.xPos = col * board.tileDimension;
         this.yPos = row * board.tileDimension;
 
-        this.type = "King";
+        this.type = PieceType.King;
         try {
             if (isWhite) {
                 this.image = ImageIO.read(Main.class.getResourceAsStream("/white_king.png")).getScaledInstance(board.tileDimension, board.tileDimension, BufferedImage.SCALE_SMOOTH);

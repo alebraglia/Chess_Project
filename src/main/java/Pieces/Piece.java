@@ -9,7 +9,7 @@ public abstract class Piece {
     public int col, row;         // coordinate nella scacchiera
     public int xPos, yPos;      // coordinate nello schermo
     public boolean isWhite;     // bool per distinguere le squadre
-    public String type;         //tipo del pezzo
+    public PieceType type;         //tipo del pezzo
     public ChessBoard board;    //board di riferimento
     public boolean isFirstMove = true;        //serve per il primo movimento del pawn e per fare castling
 

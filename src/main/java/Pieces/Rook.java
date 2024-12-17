@@ -17,7 +17,7 @@ public class Rook extends Piece {
         this.xPos = col * board.tileDimension;
         this.yPos = row * board.tileDimension;
 
-        this.type = "Rook";
+        this.type = PieceType.Rook;
         try {
             if (isWhite) {
                 this.image = ImageIO.read(Main.class.getResourceAsStream("/white_rook.png")).getScaledInstance(board.tileDimension,board.tileDimension, BufferedImage.SCALE_SMOOTH);

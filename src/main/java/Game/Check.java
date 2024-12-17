@@ -1,6 +1,7 @@
 package Game;
 
 import Pieces.Piece;
+import Pieces.PieceType;
 
 //classe che implementa tutte le funzioni relative al check
 
@@ -23,7 +24,7 @@ public class Check {
         int kingRow = king.row;
 
         //caso il pezzo selezionato sia il re imposto le sue coordinate come quelle della casella destinazione per verificare se la mossa è valida
-        if (board.selectedPiece != null && board.selectedPiece.type.equals("King")) {
+        if (board.selectedPiece != null && board.selectedPiece.type.equals(PieceType.King)) {
             kingCol = move.nextCol;
             kingRow = move.nextRow;
         }
@@ -68,7 +69,7 @@ public class Check {
             //controllo del pezzo trovato
             if (piece != null && piece != board.selectedPiece) {
                 //caso trovo una torre o una regina ritorno true
-                if (!board.sameTeam(piece, king) && (piece.type.equals("Rook") || piece.type.equals("Queen"))) {
+                if (!board.sameTeam(piece, king) && (piece.type.equals(PieceType.Rook) || piece.type.equals(PieceType.Queen))) {
                     return true;
                 }
                 break;
@@ -90,7 +91,7 @@ public class Check {
             Piece piece = board.getPiece(kingCol - (i * colVal), kingRow - (i * rowVal));
             if (piece != null && piece != board.selectedPiece) {
                 //caso trovo una torre o una regina ritorno true
-                if (!board.sameTeam(piece, king) && (piece.type.equals("Bishop") || piece.type.equals("Queen"))) {
+                if (!board.sameTeam(piece, king) && (piece.type.equals(PieceType.Bishop) || piece.type.equals(PieceType.Queen))) {
                     return true;
                 }
                 break;
@@ -107,7 +108,7 @@ public class Check {
 
     //controlla se c'è un cavallo nemico in posizione col, row
     private boolean checkKnight(Piece p, Piece king, int col, int row) {
-        return p != null && !board.sameTeam(p, king) && p.type.equals("Knight") && !(p.col == col && p.row == row);
+        return p != null && !board.sameTeam(p, king) && p.type.equals(PieceType.King) && !(p.col == col && p.row == row);
         //!(p.col == col && p.row == row) garantisce che la funzione checkKnight consideri solo i pezzi cavallo che
         // minacciano la casella in esame, escludendo il caso in cui il cavallo stesso occupa la casella che
         // stiamo controllando
@@ -121,7 +122,7 @@ public class Check {
 
     //verifica la presenza del re
     private boolean checkKing(Piece p, Piece k) {
-        return p != null && !board.sameTeam(p, k) && p.type.equals("King");
+        return p != null && !board.sameTeam(p, k) && p.type.equals(PieceType.King);
     }
 
     private boolean inPawnPath(int col, int row, Piece king, int kingCol, int kingRow) {
@@ -135,7 +136,7 @@ public class Check {
     }
 
     private boolean checkPawn(Piece p, Piece k, int col, int row) {
-        return p != null && !board.sameTeam(p, k) && p.type.equals("Pawn") && !(p.col == col && p.row == row);
+        return p != null && !board.sameTeam(p, k) && p.type.equals(PieceType.Pawn) && !(p.col == col && p.row == row);
     }
 
     //funzione che verifica uno scacco matto cercando se esiste ancora alcuna mossa valida

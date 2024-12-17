@@ -89,9 +89,9 @@ public class ChessBoard extends JPanel {
         if (isWhiteTurn) {
             isWhiteTurn = false;
         } else isWhiteTurn = true;
-        if (move.piece.type.equals("Pawn")) {
+        if (move.piece.type.equals(PieceType.Pawn)) {
             movePawn(move);           // classe parallela che permette l' en passant
-        } else if (move.piece.type.equals("King")) {
+        } else if (move.piece.type.equals(PieceType.King)) {
             moveKing(move);
         }
         //aggiorno la posizione nella scacchiera
@@ -249,16 +249,16 @@ public class ChessBoard extends JPanel {
 
         switch (piece) {
             case "Queen":
-                pieces.add(new Queen(this, move.nextCol, move.nextRow, move.piece.isWhite));
+                pieces.add(PieceFactory.createPiece(PieceType.Queen,this, move.nextCol, move.nextRow, move.piece.isWhite));
                 break;
             case "Rook":
-                pieces.add(new Rook(this, move.nextCol, move.nextRow, move.piece.isWhite));
+                pieces.add(PieceFactory.createPiece(PieceType.Rook,this, move.nextCol, move.nextRow, move.piece.isWhite));
                 break;
             case "Bishop":
-                pieces.add(new Bishop(this, move.nextCol, move.nextRow, move.piece.isWhite));
+                pieces.add(PieceFactory.createPiece(PieceType.Bishop,this, move.nextCol, move.nextRow, move.piece.isWhite));
                 break;
             case "Knight":
-                pieces.add(new Knight(this, move.nextCol, move.nextRow, move.piece.isWhite));
+                pieces.add(PieceFactory.createPiece(PieceType.Knight,this, move.nextCol, move.nextRow, move.piece.isWhite));
                 break;
         }
 
@@ -288,7 +288,7 @@ public class ChessBoard extends JPanel {
     //funzione che mi ritorna il re
     Piece findKing(boolean isWhite) {
         for (Piece piece : pieces) {
-            if (isWhite == piece.isWhite && piece.type.equals("King")) {
+            if (isWhite == piece.isWhite && piece.type.equals(PieceType.King)) {
                 return piece;
             }
         }
@@ -298,43 +298,36 @@ public class ChessBoard extends JPanel {
 
     //add the pieces to the array
     public void addPieces() {
-        pieces.add(new Rook(this, 0, 0, false));
-        pieces.add(new Knight(this, 1, 0, false));
-        pieces.add(new Bishop(this, 2, 0, false));
-        pieces.add(new Queen(this, 3, 0, false));
-        pieces.add(new King(this, 4, 0, false));
-        pieces.add(new Bishop(this, 5, 0, false));
-        pieces.add(new Knight(this, 6, 0, false));
-        pieces.add(new Rook(this, 7, 0, false));
+        // Pezzi neri
+        pieces.add(PieceFactory.createPiece(PieceType.Rook, this, 0, 0, false));
+        pieces.add(PieceFactory.createPiece(PieceType.Knight, this, 1, 0, false));
+        pieces.add(PieceFactory.createPiece(PieceType.Bishop, this, 2, 0, false));
+        pieces.add(PieceFactory.createPiece(PieceType.Queen, this, 3, 0, false));
+        pieces.add(PieceFactory.createPiece(PieceType.King, this, 4, 0, false));
+        pieces.add(PieceFactory.createPiece(PieceType.Bishop, this, 5, 0, false));
+        pieces.add(PieceFactory.createPiece(PieceType.Knight, this, 6, 0, false));
+        pieces.add(PieceFactory.createPiece(PieceType.Rook, this, 7, 0, false));
 
-        pieces.add(new Pawn(this, 0, 1, false));
-        pieces.add(new Pawn(this, 1, 1, false));
-        pieces.add(new Pawn(this, 2, 1, false));
-        pieces.add(new Pawn(this, 3, 1, false));
-        pieces.add(new Pawn(this, 4, 1, false));
-        pieces.add(new Pawn(this, 5, 1, false));
-        pieces.add(new Pawn(this, 6, 1, false));
-        pieces.add(new Pawn(this, 7, 1, false));
+        for (int i = 0; i < 8; i++) {
+            pieces.add(PieceFactory.createPiece(PieceType.Pawn, this, i, 1, false));
+        }
 
-        pieces.add(new Rook(this, 0, 7, true));
-        pieces.add(new Knight(this, 1, 7, true));
-        pieces.add(new Bishop(this, 2, 7, true));
-        pieces.add(new Queen(this, 3, 7, true));
-        pieces.add(new King(this, 4, 7, true));
-        pieces.add(new Bishop(this, 5, 7, true));
-        pieces.add(new Knight(this, 6, 7, true));
-        pieces.add(new Rook(this, 7, 7, true));
+        // Pezzi bianchi
+        pieces.add(PieceFactory.createPiece(PieceType.Rook, this, 0, 7, true));
+        pieces.add(PieceFactory.createPiece(PieceType.Knight, this, 1, 7, true));
+        pieces.add(PieceFactory.createPiece(PieceType.Bishop, this, 2, 7, true));
+        pieces.add(PieceFactory.createPiece(PieceType.Queen, this, 3, 7, true));
+        pieces.add(PieceFactory.createPiece(PieceType.King, this, 4, 7, true));
+        pieces.add(PieceFactory.createPiece(PieceType.Bishop, this, 5, 7, true));
+        pieces.add(PieceFactory.createPiece(PieceType.Knight, this, 6, 7, true));
+        pieces.add(PieceFactory.createPiece(PieceType.Rook, this, 7, 7, true));
 
-        pieces.add(new Pawn(this, 0, 6, true));
-        pieces.add(new Pawn(this, 1, 6, true));
-        pieces.add(new Pawn(this, 2, 6, true));
-        pieces.add(new Pawn(this, 3, 6, true));
-        pieces.add(new Pawn(this, 4, 6, true));
-        pieces.add(new Pawn(this, 5, 6, true));
-        pieces.add(new Pawn(this, 6, 6, true));
-        pieces.add(new Pawn(this, 7, 6, true));
-
+        for (int i = 0; i < 8; i++) {
+            pieces.add(PieceFactory.createPiece(PieceType.Pawn, this, i, 6, true));
+        }
     }
+
+
 
     // ricarico tutte le pedine della scacchiera
     public void resetBoard() {

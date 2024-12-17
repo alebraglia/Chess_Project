@@ -18,7 +18,7 @@ public class Pawn extends Piece {
         this.xPos = col * board.tileDimension;
         this.yPos = row * board.tileDimension;
 
-        this.type = "Pawn";
+        this.type = PieceType.Pawn;
         try {
             if (isWhite) {
                 this.image = ImageIO.read(Main.class.getResourceAsStream("/white_pawn.png")).getScaledInstance(board.tileDimension, board.tileDimension, BufferedImage.SCALE_SMOOTH);
