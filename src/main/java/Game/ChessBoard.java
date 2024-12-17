@@ -7,6 +7,16 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class ChessBoard extends JPanel {
+    private static ChessBoard instance;
+
+    // Metodo statico per ottenere l'istanza
+    public static synchronized ChessBoard getInstance(JFrame mainFrame, Color whiteTileColor, Color blackTileColor) {
+        if (instance == null) {
+            instance = new ChessBoard(mainFrame, whiteTileColor, blackTileColor);
+        }
+        return instance;
+    }
+
     //tile dimensions
     public int tileDimension = 75;
     // Board dimensions
@@ -29,7 +39,7 @@ public class ChessBoard extends JPanel {
         this.godMode = godMode;
     }
 
-    public ChessBoard(JFrame mainFrame, Color whiteTileColor, Color blackTileColor) {
+    private ChessBoard(JFrame mainFrame, Color whiteTileColor, Color blackTileColor) {
         this.setPreferredSize(new Dimension(cols * tileDimension, rows * tileDimension));
         this.godMode = false;
         //  inizializzo i mouseListener
