@@ -60,10 +60,6 @@ public class Pawn extends Piece {
         }
 
         // en passant destra
-        if (board.getTileNum(col, row) == board.enPassantTile && col == this.col + 1 && row == this.row - team && board.getPiece(col, row + team) != null) {
-            return true;
-        }
-
-        return false;
+        return board.getTileNum(col, row) == board.enPassantTile && col == this.col + 1 && row == this.row - team && board.getPiece(col, row + team) != null;
     }
 }

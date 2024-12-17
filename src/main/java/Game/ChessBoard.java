@@ -78,17 +78,12 @@ public class ChessBoard extends JPanel {
         if (move.piece.moveIsBlocked(move.nextCol, move.nextRow)) {  // se il movimento è ostacolato da un pezzo
             return false;
         }
-        if (checkScanner.kingIsChecked(move)) {
-            return false;
-        }
-        return true;
+        return !checkScanner.kingIsChecked(move);
     }
 
     //effettua le movimentazioni
     public void makeMove(Movement move) {
-        if (isWhiteTurn) {
-            isWhiteTurn = false;
-        } else isWhiteTurn = true;
+        isWhiteTurn = !isWhiteTurn;
         if (move.piece.type.equals(PieceType.Pawn)) {
             movePawn(move);           // classe parallela che permette l' en passant
         } else if (move.piece.type.equals(PieceType.King)) {
@@ -112,42 +107,7 @@ public class ChessBoard extends JPanel {
         Piece king = this.findKing(isWhiteTurn);
         if (checkScanner.CheckMate(king)) {
             String winner = isWhiteTurn ? "Black player wins" : "White player wins";
-
-            // creo il jframe
-            JFrame frame = new JFrame("Game Over");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(300, 150);
-
-            // jlabel che mostrerà il vincitore
-            JLabel label = new JLabel(winner, SwingConstants.CENTER);
-
-            // bottone New game
-            JButton newGameButton = new JButton("New Game");
-            newGameButton.addActionListener(e -> {
-                resetBoard();
-                frame.dispose(); // Close the current window
-            });
-
-            // bottone close
-            JButton closeButton = new JButton("Close");
-            closeButton.addActionListener(e -> {
-                System.exit(0); // Close the application
-            });
-
-            // crea il jpanel con i bottoni
-            JPanel buttonPanel = new JPanel();
-            buttonPanel.add(newGameButton);
-            buttonPanel.add(closeButton);
-
-            // aggiunge le componenti al frame
-            frame.setLayout(new BorderLayout());
-            frame.add(label, BorderLayout.CENTER);
-            frame.add(buttonPanel, BorderLayout.SOUTH);
-
-            // Center the popup relative to the main frame
-            frame.setLocationRelativeTo(mainFrame);
-            // mostra il frame
-            frame.setVisible(true);
+            Dialog.endGameDialog(winner, this.mainFrame,this);
         }
     }
 
@@ -195,57 +155,12 @@ public class ChessBoard extends JPanel {
         } else team = 7;
 
         if (move.nextRow == team) {
-            promotePawn(move);
+            Dialog.pawnPromotionDialog(move, this);
         }
     }
 
-    // Metodo per promuovere il pawn
-    public void promotePawn(Movement move) {
-        // Creazione del pannello personalizzato con i bottoni
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2, 2));
-
-        JButton queenButton = new JButton("Queen");
-        JButton rookButton = new JButton("Rook");
-        JButton bishopButton = new JButton("Bishop");
-        JButton knightButton = new JButton("Knight");
-
-        panel.add(queenButton);
-        panel.add(rookButton);
-        panel.add(bishopButton);
-        panel.add(knightButton);
-
-        // Creazione del dialogo
-        JOptionPane optionPane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
-        JDialog dialog = optionPane.createDialog("Promote Pawn");
-
-        // Aggiunta degli action listener ai bottoni
-        queenButton.addActionListener(e -> {
-            applyPromotion(move, "Queen");
-            dialog.dispose();
-        });
-
-        rookButton.addActionListener(e -> {
-            applyPromotion(move, "Rook");
-            dialog.dispose();
-        });
-
-        bishopButton.addActionListener(e -> {
-            applyPromotion(move, "Bishop");
-            dialog.dispose();
-        });
-
-        knightButton.addActionListener(e -> {
-            applyPromotion(move, "Knight");
-            dialog.dispose();
-        });
-
-        // Mostra il dialogo
-        dialog.setVisible(true);
-    }
-
     // Funzione per applicare la promozione del pedone
-    private void applyPromotion(Movement move, String piece) {
+    public void applyPromotion(Movement move, String piece) {
 
         switch (piece) {
             case "Queen":
@@ -279,10 +194,7 @@ public class ChessBoard extends JPanel {
         if (p1.isWhite && p2.isWhite) {
             return true;
         }
-        if (!p1.isWhite && !p2.isWhite) {
-            return true;
-        }
-        return false;
+        return !p1.isWhite && !p2.isWhite;
     }
 
     //funzione che mi ritorna il re
